@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Star Drawer</title>
+	<style type="text/css">input {
+		text-align: center;
+		width: 50px;
+	</style>
+</head>
+<body>
+	Number of points (3-100) <input type="text" id="points" value="9">
+	Step number <input type="text" id="step" value="3">
+	<button onclick="draw()">Draw</button><p></p>
+	<svg id="ins" xmlns="http://www.w3.org/2000/svg" width=400 height=400></svg>
+	<script type="text/javascript">
+		var sns="http://www.w3.org/2000/svg";
+		var svg=document.getElementById("ins");
+		var el;
+
+		function draw() {
+			while (svg.lastChild) {
+    			svg.removeChild(svg.lastChild);
+			}
+			var pt = parseInt(document.getElementById("points").value, 10);
+			var st = parseInt(document.getElementById("step").value, 10);
+			if(!pt || !st) return;
+			if(pt<3 || pt>100) return;
+			st = st % pt;
+			if (st <= 0) st = 1;
+			var currentPoint = 0;
+			var currentMin = 0;
+			var x1=400;
+			var y1=200;
+			var ang = Math.PI * 2 / pt;
+			for (var i = 0; i < pt; i++) {
+				currentPoint = (currentPoint + st) % pt;
+				x2 = 200 + 200 * Math.cos(currentPoint * ang);
+				y2 = 200 + 200 * Math.sin(currentPoint * ang);
+				drawLine(x1, y1, x2, y2);
+				if (currentPoint == currentMin) {
+					currentPoint++;
+					currentMin++;
+					x1 = 200 + 200 * Math.cos(currentPoint * ang);
+					y1 = 200 + 200 * Math.sin(currentPoint * ang);
+				} else {
+					x1 = x2;
+					y1 = y2;
+				}
+			}
+		}
+
+		function drawLine(x1, y1, x2, y2) {
+			var line=document.createElementNS(sns, "line");
+			line.setAttributeNS(null, 'x1', x1);
+       		line.setAttributeNS(null, 'y1', y1);
+       		line.setAttributeNS(null, 'x2', x2);
+       		line.setAttributeNS(null, 'y2', y2);
+       		line.style.stroke="black";
+       		svg.appendChild(line);
+		}
+	</script>
+
+</body>
+</html>
